@@ -14,11 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from rest_framework.urlpatterns import format_suffix_patterns
 from parkingspots import views
 
 urlpatterns = [
     path(r'admin/', admin.site.urls),
-    path(r'spots/',views.spotsList.as_view())
+    # path(r'spots/',views.SpotList.as_view()),
+    # re_path(r'^api/v1/parkingspots/available/(?P<lat>[-0-9\.])/(?P<lon>[-0-9\.])/(?P<radius>[0-9\.])/',views.available),
+    # re_path(r'^spots/(?P<lat>[-0-9\.])/(?P<lon>[-0-9\.])/(?P<radius>[0-9\.])/', views.spotsList.available)
+    # re_path(r'^api/v1/parkingspots/available/(?P<lat>[-0-9\.])/(?P<lon>[-0-9\.])/(?P<radius>[0-9\.])/$',views.available)
+    re_path(r'^api/v1/parkingspots/available/(?P<lat>[-0-9\.]+)/(?P<lon>[-0-9\.]+)/(?P<radius>[0-9\.]+)$',views.available)
 ]

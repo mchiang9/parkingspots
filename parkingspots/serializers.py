@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from . models import spots
+from . models import Spot
 
 class spotsSerializer(serializers.ModelSerializer):
 
 	class Meta:
-		model = spots
+		model = Spot
 		fields = {'identity','lat','lon'}
