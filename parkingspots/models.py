@@ -19,3 +19,9 @@ class Spot(models.Model):
 
 	def inRange(self,radius,trueDist):
 		return ((trueDist <= radius) == True)
+
+	def isNotReserved(self):
+		return (self.reserved == False)
+
+	def spotAvailable(self,radius,trueDist):
+		return (self.inRange(radius,trueDist) and self.isNotReserved)

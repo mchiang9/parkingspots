@@ -11,15 +11,10 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
 from . models import Spot
-# from . serializers import spotsSerializer
-# from django.core import serializers
 
  
 @api_view(['GET', ])
 def available(request,lat,lon,radius):
-	# cust_Lat = request.GET.get('lat',0)
-	# cust_Lon = request.GET.get('lon',0)
-	# cust_Radius = request.GET.get('radius',0)
 	try: 
 		lat = float(lat)
 		lon = float(lon)
@@ -31,8 +26,9 @@ def available(request,lat,lon,radius):
 	inRangeSpots = []
 	for parkSpots in Spot.objects.all():
 		if parkSpots.inRange(radius, 
-				parkSpots.distance(parkSpots.lat,lat,parkSpots.lon,lon)):
-			inRangeSpots.append({"id": parkSpots.identity, "lat": parkSpots.lat, "lon": parkSpots.lon})
+			parkSpots.distance(parkSpots.lat,lat,parkSpots.lon,lon)):
+			if(parkSpots.reserved == False):
+				inRangeSpots.append({"id": parkSpots.identity, "lat": parkSpots.lat, "lon": parkSpots.lon})
 	return JsonResponse(inRangeSpots, safe = False)
 
 @api_view(['POST', ])
