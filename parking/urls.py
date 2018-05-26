@@ -20,9 +20,7 @@ from parkingspots import views
 
 urlpatterns = [
     path(r'admin/', admin.site.urls),
-    # path(r'spots/',views.SpotList.as_view()),
-    # re_path(r'^api/v1/parkingspots/available/(?P<lat>[-0-9\.])/(?P<lon>[-0-9\.])/(?P<radius>[0-9\.])/',views.available),
-    # re_path(r'^spots/(?P<lat>[-0-9\.])/(?P<lon>[-0-9\.])/(?P<radius>[0-9\.])/', views.spotsList.available)
-    # re_path(r'^api/v1/parkingspots/available/(?P<lat>[-0-9\.])/(?P<lon>[-0-9\.])/(?P<radius>[0-9\.])/$',views.available)
-    re_path(r'^api/v1/parkingspots/available/(?P<lat>[-0-9\.]+)/(?P<lon>[-0-9\.]+)/(?P<radius>[0-9\.]+)$',views.available)
+    re_path(r'^api/v1/parkingspots/available/(?P<lat>[-0-9\.]+)/(?P<lon>[-0-9\.]+)/(?P<radius>[0-9\.]+)$',views.available),
+    re_path(r'^api/v1/parkingspots/reserve/(?P<idx>[0-9]+)$',views.reserve),
+    re_path(r'^api/v1/parkingspots/isreserve/(?P<idx>[0-9]+)$',views.is_reserved)
 ]

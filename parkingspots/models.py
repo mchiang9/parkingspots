@@ -1,5 +1,4 @@
 from django.db import models
-import math
 # Create your models here.
 
 class Spot(models.Model):
@@ -11,19 +10,12 @@ class Spot(models.Model):
 	def __int__(self):
 		return self.identity
 
-	def haversine(self,x1,x2,y1,y2):
-		lat1 = math.radians(x1)
-		lat2 = math.radians(x2)
-		lon1 = math.radians(y1)
-		lon2 = math.radians(y2)
-		delt_lat = (lat2-lat1)
-		delt_lon = (lon2-lon1)
-		# Haversine Formula
-		a = ((math.sin(delt_lat))**2)+ math.cos(lat1)*math.cos(lat2)+((math.sin(delt_lon))**2)
-		c = (2 * math.atan2(a**0.5, (1-a)**0.5))
-		# Earth's Radius in km
-		R = 6371
-		return R*c
+	def distance(self,x1,x2,y1,y2):
+		x1 = float(x1)
+		x2 = float(x2)
+		y1 = float(y1)
+		y2 = float(y2)
+		return ((x1-x2)**2 + (y1-y2)**2)**.5
 
 	def inRange(self,radius,trueDist):
 		return ((trueDist <= radius) == True)

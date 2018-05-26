@@ -1,50 +1,20 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
+from rest_framework.exceptions import ValidationError
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 # Create your views here.
 
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
+
 from . models import Spot
-from . serializers import spotsSerializer
-from django.core import serializers
-import math
+# from . serializers import spotsSerializer
+# from django.core import serializers
+
  
-
-
-
-# @api_view(['GET', ])
-# def available(request,lat,lon,radius):
-# 	# cust_Lat = request.GET.get('lat',0)
-# 	# cust_Lon = request.GET.get('lon',0)
-# 	# cust_Radius = request.GET.get('radius',0)
-# 	try: 
-# 		lat = float(lat)
-# 		lon = float(lon)
-# 		radius = float(radius)
-# 		print("POOOP")
-# 		print(lat, lon, radius)
-# 	except ValueError:
-# 	    # should not happen if regex is correct 
-# 	    # perhaps replace print statement with a suitable Response to client 
-# 	     print("Request parameters are invalid")
-# 	inRangeIDs = []
-# 	for parkSpots in Spot.objects.all():
-# 		if (parkSpots.inRange(radius, 
-# 		parkSpots.haversine(parkSpots.lat,lat
-# 		,parkSpots.lon,lon)) == True):
-
-# 			inRangeIDs.append(parkSpots.identity)
-# 	print(inRangeIDs)
-# 	spots1 = Spot.objects.filter(reserved = False 
-# 			, identity__in = inRangeIDs
-# 			 )
-
-# 	serializer = spotsSerializer(spots1, many= True)
-# 	return Response(serializer.data@api_view(['GET', ])
 @api_view(['GET', ])
 def available(request,lat,lon,radius):
 	# cust_Lat = request.GET.get('lat',0)
@@ -54,29 +24,33 @@ def available(request,lat,lon,radius):
 		lat = float(lat)
 		lon = float(lon)
 		radius = float(radius)
-		print("POOOP")
-		print(lat, lon, radius)
+	# Never reach ValueError since regex will take care of invalid requests
 	except ValueError:
-	    # should not happen if regex is correct 
-	    # perhaps replace print statement with a suitable Response to client 
-	     print("Request parameters are invalid")
+		raise ValidationError("Unexpected parameters - please make sure lat, lon, and radius are valid floating point values")
+
 	inRangeSpots = []
 	for parkSpots in Spot.objects.all():
-		print(parkSpots.identity, parkSpots.lat, parkSpots.lon)
 		if parkSpots.inRange(radius, 
-				parkSpots.haversine(parkSpots.lat,lat,parkSpots.lon,lon)):
+				parkSpots.distance(parkSpots.lat,lat,parkSpots.lon,lon)):
 			inRangeSpots.append({"id": parkSpots.identity, "lat": parkSpots.lat, "lon": parkSpots.lon})
-	print(len(inRangeSpots))
-	return JsonResponse(inRangeSpots)
+	return JsonResponse(inRangeSpots, safe = False)
 
-def reserve(request):
-	pass
-	# if(request.POST):
-	# 	spot_form = SpotForm(request.POST)
-	# 	if(spot_form.isValid()):
+@api_view(['POST', ])
+def reserve(request, idx):
+	parkSpot = Spot.objects.get(identity=idx)
+	if not parkSpot:
+		raise ValidationError("Could not find spot with id: " + str(idx))
+	parkSpot.reserved = True
+	parkSpot.save()
+	return JsonResponse({"reserved": "true"})
 
-	# cust_ID = request.POST.get('id')
 
+@api_view(['GET', ])
+def is_reserved(request, idx):
+	parkSpot = Spot.objects.get(identity=idx)
+	if not parkSpot:
+		raise ValidationError("Could not find spot with id: " + str(idx))
+	return JsonResponse({"reserved": parkSpot.reserved})
 
 
 
