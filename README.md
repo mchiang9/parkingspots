@@ -1,28 +1,11 @@
-If you encounter any issues during this process, ask a backend developer for help!
+## Parking Spot Locator App
 
-Python and virtualenv setup:
-```
-brew install python
-pip install virtualenv
-```
+This app is locates available parking spots in a radius around given Latitude and Longitude coordinates.
 
-Django setup:
-```
-virtualenv venv
-source venv/bin/activate
-pip install -r requirements.txt
-./manage.py migrate
-./manage.py runserver
-```
+### Testing:
 
-After you make changes to your models.py:
-```
-./manage.py makemigrations
-./manage.py migrate
-```
+There are 2 sets of tests that should be run. 
 
-Recommended steps for creating your parking app:
-1. Think about how to structure your database (your Models and their Fields)
-2. Think about what APIs (Views) you'll need and what they should be called (their url paths)
-3. Think about how you'd test these APIs
+The first set of tests is to test the actual algorithm to ensure that there are no problems. This is done in **tests.py**. This can be run using: **python manage.py test parkingspots**.
 
+The second set of tests is to test the GET and POST functions of the app. This test can be done using cURL or Postman. Attached in the curlTests.txt file is a series of cURL commands and the desired results given this database.
