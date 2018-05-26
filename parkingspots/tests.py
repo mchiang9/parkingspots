@@ -75,6 +75,7 @@ class SpotTests(TestCase):
 		lon1 = -124.40
 		spot3 = Spot(identity = 1, lat = lat1,lon = lon1,reserved = True)
 		trueDist = spot3.distance(cust_lat,spot3.lat,cust_lon,spot3.lon)
+		# print(spot3.reserved)
 		self.assertIs(spot3.spotAvailable(radius,trueDist),False)
 
 	def test_reserved_spot_out_of_range(self):
@@ -85,6 +86,8 @@ class SpotTests(TestCase):
 		lat1 = 33.50
 		lon1 = -124.40
 		spot3 = Spot(identity = 1, lat = lat1,lon = lon1,reserved = True)
+		# print(spot3.reserved)
+		# print(spot3.InRange(spt3spot3.isNotReserved())
 		trueDist = spot3.distance(cust_lat,spot3.lat,cust_lon,spot3.lon)
 		self.assertIs(spot3.spotAvailable(radius,trueDist),False)
 
