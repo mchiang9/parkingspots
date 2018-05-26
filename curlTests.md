@@ -1,3 +1,4 @@
+##
 #1
 Standard get function
 Gets everything in range that is not reserved
